@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
+
 import org.json.*;   // You need org.json library
 
 public class LaunchPage {
@@ -15,6 +17,9 @@ public class LaunchPage {
     private JSplitPane spellPane, enchantPane, parentPane;
     private JLabel damageLabel, accuracyLabel, pipLabel;
 
+
+    private JSONObject currentSpell = null;
+    private JSONObject currentEnchant = null;
 
 
 
@@ -131,6 +136,7 @@ public class LaunchPage {
             if (!e.getValueIsAdjusting()) {
                 int index = spellList.getSelectedIndex();
                 JSONObject spell = spellsArray.getJSONObject(index);
+                currentSpell = spell;
 
                 // Load icon
                 ImageIcon icon = new ImageIcon("src/resources/assets/spells/damage-spells/" + spell.getString("image"));
@@ -140,38 +146,48 @@ public class LaunchPage {
                 JSONObject dmg = spell.getJSONObject("damage");
                 int min = dmg.getInt("min");
                 int max = dmg.getInt("max");
-                damageLabel.setText("Damage: " + min + " - " + max);
+                //damageLabel.setText("Damage: " + min + " - " + max);
 
                 // Update accuracy label
                 int accuracy = spell.getInt("accuracy");
-                accuracyLabel.setText("Accuracy: " + accuracy);
+                //accuracyLabel.setText("Accuracy: " + accuracy);
+
 
                 // Update pip label
                 int pipCost = spell.getInt("pipCost");
                 pipLabel.setText("Pip Cost: " + pipCost);
+                updateFooter();
             }
+        });
+
+
+        JComboBox<String> enchantTypeSelector = new JComboBox<>(new String[] {
+                "Damage Enchants",
+                "Accuracy Enchants"
         });
 
         // When user selects an enchant
         enchantList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int index = enchantList.getSelectedIndex();
-                JSONObject spell = spellsEnchantsArray.getJSONObject(index);
-
+                JSONObject enchant = spellsEnchantsArray.getJSONObject(index);
+                currentEnchant = enchant;
                 // Load icon
-                ImageIcon icon = new ImageIcon("src/resources/assets/spells/enchants/damage" + spell.getString("image"));
-                spellImage.setIcon(icon);
 
-                // Update damage label
-                int dmg = spell.getInt("damage");
+                if (Objects.equals(currentEnchant.getString("type"), "damage"))
+                {
+                    ImageIcon icon = new ImageIcon("src/resources/assets/spells/enchants/damage/" + enchant.getString("image"));
+                    enchantImage.setIcon(icon);
+                }
+                if (Objects.equals(currentEnchant.getString("type"), "accuracy")){
+                    ImageIcon icon = new ImageIcon("src/resources/assets/spells/enchants/accuracy/" + enchant.getString("image"));
+                    enchantImage.setIcon(icon);
+                }
 
-                // Update accuracy label
-                int accuracy = spell.getInt("accuracy");
-
-                // Update pip label
-                int pipCost = spell.getInt("pipCost");
+                updateFooter();
             }
         });
+
     }
 
 
@@ -199,6 +215,38 @@ public class LaunchPage {
         bottomPanel.add(damageLabel);
         bottomPanel.add(accuracyLabel);
         bottomPanel.add(pipLabel);
+    }
+
+    private void updateFooter() {
+
+
+        if (currentSpell == null) {
+            damageLabel.setText("Damage: ---"); //no spell selected
+            accuracyLabel.setText("Accuracy: ---");
+        }
+        if (currentSpell != null) {
+            JSONObject dmg = currentSpell.getJSONObject("damage");
+            int min = dmg.getInt("min");;
+            int max = dmg.getInt("max");
+            int spellAccuracy = currentSpell.getInt("accuracy");
+
+            if (currentEnchant != null) { //spell and enchant
+                int enchantAccuracy = currentEnchant.getInt("accuracy");
+                int damage = currentEnchant.getInt("damage");
+
+                int finalMin      = min + damage;
+                int finalMax      = max + damage;
+                int finalAccuracy = spellAccuracy + enchantAccuracy;
+
+                damageLabel.setText("Damage: " + finalMin + " - " + finalMax);
+                accuracyLabel.setText(String.valueOf(finalAccuracy));
+            }
+            else { //just spell
+                damageLabel.setText("Damage: " + min + " - " + max);
+                accuracyLabel.setText("Accuracy: " + spellAccuracy);
+            }
+        }
+
     }
 
 
