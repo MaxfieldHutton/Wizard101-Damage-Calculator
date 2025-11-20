@@ -9,8 +9,9 @@ public class LaunchPage{
     private JPanel panel;
     private JPanel topPanel;
     private JPanel mainPanel;
+    private JPanel bottomPanel;
     private JLabel label;
-    private JSplitPane SpellComboBox;
+    private JSplitPane SpellSplitPane;
 
     int windowWidth = 800;
     int windowHeight = 500;
@@ -29,9 +30,11 @@ public class LaunchPage{
 
         JPanel headerPanel = new JPanel();
         JPanel mainPanel = new JPanel();
+        JPanel bottomPanel = new JPanel();
 
         container.add(headerPanel);
         container.add(mainPanel);
+        container.add(bottomPanel);
 
 
         //top panel used as the header
@@ -53,10 +56,20 @@ public class LaunchPage{
         mainPanel.setBackground(Color.GRAY);
 
 
+        //bottom panel is the output where you see your damage
+        bottomPanel = new JPanel();
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        bottomPanel.setBackground(Color.WHITE);
+
+        ImageIcon damageIcon = new ImageIcon("assets/spell-icons/Damage_32x32.png");
+        label = new JLabel("Your Damage: ", damageIcon, JLabel.LEFT);
+        label.setForeground(Color.BLACK);
+        bottomPanel.add(label);
 
         //im pretty sure this code has to go last????
         frame.add(topPanel, BorderLayout.NORTH);
         frame.add(mainPanel, BorderLayout.CENTER);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
     }
 
