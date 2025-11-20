@@ -1,130 +1,165 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import org.json.*;   // You need org.json library
 
-
-public class LaunchPage{
+public class LaunchPage {
 
     private JFrame frame;
-    private JPanel panel;
-    private JPanel topPanel;
-    private JPanel mainPanel;
-    private JPanel bottomPanel;
-    private JLabel label;
-    private JSplitPane SpellSplitPane;
+    private JPanel topPanel, mainPanel, bottomPanel;
 
-    int windowWidth = 800;
-    int windowHeight = 500;
+    private JSONArray spellsArray;     // holds full JSON spell data
 
-    LaunchPage(){
-        //set up the main window
-        frame = new JFrame();
-        frame.setTitle("Wizard101 Damage Calculator");
+    private JLabel damageLabel, accuracyLabel, pipLabel;
+
+
+
+    public LaunchPage() {
+
+        frame = new JFrame("Wizard101 Damage Calculator");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(windowWidth, windowHeight);
+        frame.setSize(800, 500);
         frame.setLocationRelativeTo(null);
 
-        //set up the container that holds the panels
-        JPanel container = new JPanel();
-        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        buildTopPanel();
+        buildMainPanel();
+        buildBottomPanel();
 
-        JPanel headerPanel = new JPanel();
-        JPanel mainPanel = new JPanel();
-        JPanel bottomPanel = new JPanel();
+        frame.add(topPanel, BorderLayout.NORTH);
+        frame.add(mainPanel, BorderLayout.CENTER);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
 
-        container.add(headerPanel);
-        container.add(mainPanel);
-        container.add(bottomPanel);
+        frame.setVisible(true);
+    }
 
-
-        //top panel used as the header
+    // ------------------------------
+    //  Top Panel
+    // ------------------------------
+    private void buildTopPanel() {
         topPanel = new JPanel();
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.setBackground(Color.DARK_GRAY);
 
-        ImageIcon wizIcon = new ImageIcon("assets/wiz.png");
-        label = new JLabel("W101 Damage Calculator", wizIcon, JLabel.LEFT);
+        ImageIcon wizIcon = new ImageIcon("src/resources/assets/wiz.png");
+
+        JLabel label = new JLabel("W101 Damage Calculator", wizIcon, JLabel.LEFT);
         label.setForeground(Color.BLACK);
-        topPanel.add(label);
 
         label.setHorizontalTextPosition(SwingConstants.CENTER);
         label.setVerticalTextPosition(SwingConstants.BOTTOM);
 
-        //main panel is where everything will happen
-        mainPanel = new JPanel();
+        topPanel.add(label);
+    }
+
+
+    // ------------------------------
+    //  Main Panel (JList + Image)
+    // ------------------------------
+    private void buildMainPanel() {
+
+        mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(Color.GRAY);
 
-        // Spell Selector (simple for now)
-        String[] spells = {
-                "Fire Cat", "Thunder Snake", "Frost Beetle", "Scarab", "Dark Sprite", "Imp", "Blood Bat"
-        };
+        // JSON loading
+        spellsArray = loadSpellData();
 
-        JList<String> spellList = new JList<>(spells);
+        // Build spell list
+        DefaultListModel<String> model = new DefaultListModel<>();
+
+        for (int i = 0; i < spellsArray.length(); i++) {
+            JSONObject o = spellsArray.getJSONObject(i);
+            model.addElement(o.getString("displayName"));
+        }
+
+        JList<String> spellList = new JList<>(model);
         spellList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane listScroll = new JScrollPane(spellList);
 
-        //setup the spell image
-        JLabel spellImage = new JLabel();
-        spellImage.setHorizontalAlignment(JLabel.CENTER);
-        spellImage.setVerticalAlignment(JLabel.CENTER);
-
+        // Right side image panel
+        JLabel spellImage = new JLabel("", JLabel.CENTER);
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.add(spellImage, BorderLayout.CENTER);
 
-        //split the pane in half with test on the left and image on the right
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScroll, imagePanel);
+        JSplitPane splitPane = new JSplitPane(
+                JSplitPane.HORIZONTAL_SPLIT,
+                listScroll,
+                imagePanel
+        );
 
-        //default size of the left panel
         splitPane.setDividerLocation(200);
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(splitPane, BorderLayout.NORTH);
+        mainPanel.add(splitPane, BorderLayout.CENTER);
 
+        // When user selects a spell
         spellList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
+                int index = spellList.getSelectedIndex();
+                JSONObject spell = spellsArray.getJSONObject(index);
 
-                String selected = spellList.getSelectedValue();
-                ImageIcon icon = new ImageIcon("assets/spells/" + selected + ".png");
+                // Load icon
+                ImageIcon icon = new ImageIcon("src/resources/assets/spells/" + spell.getString("image"));
                 spellImage.setIcon(icon);
 
-                if (icon.getIconWidth() > 0 && icon.getIconHeight() > 0) {
+                // Update damage label
+                JSONObject dmg = spell.getJSONObject("damage");
+                int min = dmg.getInt("min");
+                int max = dmg.getInt("max");
+                damageLabel.setText("Damage: " + min + " - " + max);
 
-                    int imgH = icon.getIconHeight();
+                // Update accuracy label
+                int accuracy = spell.getInt("accuracy");
+                accuracyLabel.setText("Accuracy: " + accuracy);
 
-                    // Resize ONLY the split pane
-                    Dimension newSize = new Dimension(splitPane.getWidth(), imgH + 40);
-                    splitPane.setPreferredSize(newSize);
-
-                    // Refresh ONLY the split pane
-                    splitPane.revalidate();
-                    splitPane.repaint();
-                }
+                // Update pip label
+                int pipCost = spell.getInt("pipCost");
+                pipLabel.setText("Pip Cost: " + pipCost);
             }
         });
+    }
 
 
-
-
-        //bottom panel is the output where you see your damage
+    // ------------------------------
+    //  Bottom Panel
+    // ------------------------------
+    private void buildBottomPanel() {
         bottomPanel = new JPanel();
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         bottomPanel.setBackground(Color.WHITE);
 
-        ImageIcon damageIcon = new ImageIcon("assets/spell-icons/Damage_32x32.png");
-        label = new JLabel("Your Damage: ", damageIcon, JLabel.LEFT);
-        label.setForeground(Color.BLACK);
-        bottomPanel.add(label);
+        ImageIcon damageIcon = new ImageIcon("src/resources/assets/spell-icons/32x32/Damage.png");
+        ImageIcon accuracyIcon = new ImageIcon("src/resources/assets/spell-icons/32x32/Accuracy.png");
+        ImageIcon pipIcon = new ImageIcon("src/resources/assets/spell-icons/32x32/Power_Pip.png");
 
+        damageLabel = new JLabel("Damage: ---", damageIcon, JLabel.LEFT);
+        damageLabel.setForeground(Color.BLACK);
 
+        accuracyLabel = new JLabel("Accuracy: ---", accuracyIcon, JLabel.LEFT);
+        accuracyLabel.setForeground(Color.BLACK);
 
+        pipLabel = new JLabel("Pip Cost: ---", pipIcon, JLabel.LEFT);
+        pipLabel.setForeground(Color.BLACK);
 
-        //im pretty sure this code has to go last????
-        frame.add(topPanel, BorderLayout.NORTH);
-        frame.add(mainPanel, BorderLayout.CENTER);
-        frame.add(bottomPanel, BorderLayout.SOUTH);
-        frame.setVisible(true);
+        bottomPanel.add(damageLabel);
+        bottomPanel.add(accuracyLabel);
+        bottomPanel.add(pipLabel);
     }
 
 
+
+    // ------------------------------
+    //  JSON Loader
+    // ------------------------------
+    private JSONArray loadSpellData() {
+        try {
+            String json = new String(Files.readAllBytes(Paths.get("src/resources/SpellData.json")));
+            JSONObject root = new JSONObject(json);
+            return root.getJSONArray("spells");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to load SpellData.json");
+            return new JSONArray();
+        }
+    }
 }

@@ -1,0 +1,42 @@
+{
+  "spells": [
+    {
+      "id": "fire_cat",
+      "displayName": "Fire Cat",
+      "school": "Fire",
+      "accuracy": 75,
+      "damage": {
+        "min": 80,
+        "max": 120
+      },
+      "pipCost": 1,
+      "image": "fire_cat.png"
+    },
+
+    {
+      "id": "thunder_snake",
+      "displayName": "Thunder Snake",
+      "school": "Storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 105,
+        "max": 145
+      },
+      "pipCost": 1,
+      "image": "thunder_snake.png"
+    },
+
+    {
+      "id": "blood_bat",
+      "displayName": "Blood Bat",
+      "school": "Myth",
+      "accuracy": 80,
+      "damage": {
+        "min": 70,
+        "max": 110
+      },
+      "pipCost": 1,
+      "image": "blood_bat.png"
+    }
+  ]
+}
