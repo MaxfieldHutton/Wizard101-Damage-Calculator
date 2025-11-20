@@ -55,6 +55,56 @@ public class LaunchPage{
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(Color.GRAY);
 
+        // Spell Selector (simple for now)
+        String[] spells = {
+                "Fire Cat", "Thunder Snake", "Frost Beetle", "Scarab", "Dark Sprite", "Imp", "Blood Bat"
+        };
+
+        JList<String> spellList = new JList<>(spells);
+        spellList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane listScroll = new JScrollPane(spellList);
+
+        //setup the spell image
+        JLabel spellImage = new JLabel();
+        spellImage.setHorizontalAlignment(JLabel.CENTER);
+        spellImage.setVerticalAlignment(JLabel.CENTER);
+
+        JPanel imagePanel = new JPanel(new BorderLayout());
+        imagePanel.add(spellImage, BorderLayout.CENTER);
+
+        //split the pane in half with test on the left and image on the right
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScroll, imagePanel);
+
+        //default size of the left panel
+        splitPane.setDividerLocation(200);
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(splitPane, BorderLayout.NORTH);
+
+        spellList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+
+                String selected = spellList.getSelectedValue();
+                ImageIcon icon = new ImageIcon("assets/spells/" + selected + ".png");
+                spellImage.setIcon(icon);
+
+                if (icon.getIconWidth() > 0 && icon.getIconHeight() > 0) {
+
+                    int imgH = icon.getIconHeight();
+
+                    // Resize ONLY the split pane
+                    Dimension newSize = new Dimension(splitPane.getWidth(), imgH + 40);
+                    splitPane.setPreferredSize(newSize);
+
+                    // Refresh ONLY the split pane
+                    splitPane.revalidate();
+                    splitPane.repaint();
+                }
+            }
+        });
+
+
+
 
         //bottom panel is the output where you see your damage
         bottomPanel = new JPanel();
@@ -66,11 +116,15 @@ public class LaunchPage{
         label.setForeground(Color.BLACK);
         bottomPanel.add(label);
 
+
+
+
         //im pretty sure this code has to go last????
         frame.add(topPanel, BorderLayout.NORTH);
         frame.add(mainPanel, BorderLayout.CENTER);
         frame.add(bottomPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
     }
+
 
 }
