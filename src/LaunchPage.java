@@ -34,6 +34,7 @@ public class LaunchPage{
         container.add(mainPanel);
 
 
+        //top panel used as the header
         topPanel = new JPanel();
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.setBackground(Color.DARK_GRAY);
@@ -46,14 +47,17 @@ public class LaunchPage{
         label.setHorizontalTextPosition(SwingConstants.CENTER);
         label.setVerticalTextPosition(SwingConstants.BOTTOM);
 
+        //main panel is where everything will happen
         mainPanel = new JPanel();
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 100, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(Color.GRAY);
 
+
+
+        //im pretty sure this code has to go last????
         frame.add(topPanel, BorderLayout.NORTH);
         frame.add(mainPanel, BorderLayout.CENTER);
         frame.setVisible(true);
     }
-
 
 }
