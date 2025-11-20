@@ -10,8 +10,11 @@ public class LaunchPage {
     private JPanel topPanel, mainPanel, bottomPanel;
 
     private JSONArray spellsArray;     // holds full JSON spell data
+    private JSONArray spellsEnchantsArray;     // holds full JSON enchant data
 
+    private JSplitPane spellPane, enchantPane, parentPane;
     private JLabel damageLabel, accuracyLabel, pipLabel;
+
 
 
 
@@ -62,18 +65,19 @@ public class LaunchPage {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(Color.GRAY);
 
+        /// //////////////////////////normal spells
         // JSON loading
         spellsArray = loadSpellData();
 
         // Build spell list
-        DefaultListModel<String> model = new DefaultListModel<>();
+        DefaultListModel<String> modelSpell = new DefaultListModel<>();
 
         for (int i = 0; i < spellsArray.length(); i++) {
             JSONObject o = spellsArray.getJSONObject(i);
-            model.addElement(o.getString("displayName"));
+            modelSpell.addElement(o.getString("displayName"));
         }
 
-        JList<String> spellList = new JList<>(model);
+        JList<String> spellList = new JList<>(modelSpell);
         spellList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane listScroll = new JScrollPane(spellList);
@@ -83,14 +87,44 @@ public class LaunchPage {
         JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.add(spellImage, BorderLayout.CENTER);
 
-        JSplitPane splitPane = new JSplitPane(
-                JSplitPane.HORIZONTAL_SPLIT,
-                listScroll,
-                imagePanel
-        );
+        spellPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScroll, imagePanel);
+        spellPane.setDividerLocation(200);
+        /// //////////////////////////
 
-        splitPane.setDividerLocation(200);
-        mainPanel.add(splitPane, BorderLayout.CENTER);
+        /// ///////////////////////// enchants
+        // JSON loading
+        spellsEnchantsArray = loadSpellEnchantData();
+
+        // Build spell list
+        DefaultListModel<String> model = new DefaultListModel<>();
+
+        for (int i = 0; i < spellsEnchantsArray.length(); i++) {
+            JSONObject o = spellsEnchantsArray.getJSONObject(i);
+            model.addElement(o.getString("displayName"));
+        }
+
+        JList<String> enchantList = new JList<>(model);
+        enchantList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane enchantListScroll = new JScrollPane(enchantList);
+
+        // Right side image panel
+        JLabel enchantImage = new JLabel("", JLabel.CENTER);
+        JPanel enchantimagePanel = new JPanel(new BorderLayout());
+        enchantimagePanel.add(enchantImage, BorderLayout.CENTER);
+
+        enchantPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, enchantListScroll, enchantimagePanel);
+        enchantPane.setDividerLocation(200);
+        /// /////////////////////////
+
+        /// ///////////////////////// parent pane
+        parentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spellPane, enchantPane);
+        parentPane.setDividerLocation(400);
+
+        /// /////////////////////////
+
+
+        mainPanel.add(parentPane);
 
         // When user selects a spell
         spellList.addListSelectionListener(e -> {
@@ -99,7 +133,7 @@ public class LaunchPage {
                 JSONObject spell = spellsArray.getJSONObject(index);
 
                 // Load icon
-                ImageIcon icon = new ImageIcon("src/resources/assets/spells/" + spell.getString("image"));
+                ImageIcon icon = new ImageIcon("src/resources/assets/spells/damage-spells/" + spell.getString("image"));
                 spellImage.setIcon(icon);
 
                 // Update damage label
@@ -115,6 +149,27 @@ public class LaunchPage {
                 // Update pip label
                 int pipCost = spell.getInt("pipCost");
                 pipLabel.setText("Pip Cost: " + pipCost);
+            }
+        });
+
+        // When user selects an enchant
+        enchantList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int index = enchantList.getSelectedIndex();
+                JSONObject spell = spellsEnchantsArray.getJSONObject(index);
+
+                // Load icon
+                ImageIcon icon = new ImageIcon("src/resources/assets/spells/enchants/damage" + spell.getString("image"));
+                spellImage.setIcon(icon);
+
+                // Update damage label
+                int dmg = spell.getInt("damage");
+
+                // Update accuracy label
+                int accuracy = spell.getInt("accuracy");
+
+                // Update pip label
+                int pipCost = spell.getInt("pipCost");
             }
         });
     }
@@ -159,6 +214,18 @@ public class LaunchPage {
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to load SpellData.json");
+            return new JSONArray();
+        }
+    }
+
+    private JSONArray loadSpellEnchantData() {
+        try {
+            String json = new String(Files.readAllBytes(Paths.get("src/resources/SpellDataEnchants.json")));
+            JSONObject root = new JSONObject(json);
+            return root.getJSONArray("spells");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to load SpellDataEnchants.json");
             return new JSONArray();
         }
     }

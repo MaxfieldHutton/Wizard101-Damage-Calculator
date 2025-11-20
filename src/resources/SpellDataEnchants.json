@@ -1,0 +1,63 @@
+{
+  "spells": [
+    {
+      "id": "strong",
+      "displayName": "Strong",
+      "school": "Sun",
+      "damage": 100,
+      "accuracy": 0,
+      "pipCost": 0,
+      "image": "strong.png"
+    },
+
+    {
+      "id": "giant",
+      "displayName": "Giant",
+      "school": "Sun",
+      "damage": 125,
+      "accuracy": 0,
+      "pipCost": 0,
+      "image": "giant.png"
+    },
+
+    {
+      "id": "monstrous",
+      "displayName": "Monstrous",
+      "school": "Sun",
+      "damage": 175,
+      "accuracy": 0,
+      "pipCost": 0,
+      "image": "monstrous.png"
+    },
+
+    {
+      "id": "gargantuan",
+      "displayName": "Gargantuan",
+      "school": "Sun",
+      "damage": 225,
+      "accuracy": 0,
+      "pipCost": 0,
+      "image": "gargantuan.png"
+    },
+
+    {
+      "id": "colossal",
+      "displayName": "Colossal",
+      "school": "Sun",
+      "damage": 275,
+      "accuracy": 0,
+      "pipCost": 0,
+      "image": "colossal.png"
+    },
+
+    {
+      "id": "epic",
+      "displayName": "Epic",
+      "school": "Sun",
+      "damage": 300,
+      "accuracy": 0,
+      "pipCost": 0,
+      "image": "epic.png"
+    }
+  ]
+}
