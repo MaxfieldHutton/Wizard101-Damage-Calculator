@@ -23,5 +23,101 @@
       },
       "pipCost": 2
     },
+
+    {
+      "id": "storm_shark",
+      "displayName": "Storm Shark",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 375,
+        "max": 435
+      },
+      "pipCost": 3
+    },
+
+    {
+      "id": "thermic_golem",
+      "displayName": "Thermic Golem",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 325,
+        "max": 485
+      },
+      "pipCost": 4
+    },
+
+    {
+      "id": "kraken",
+      "displayName": "Kraken",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 520,
+        "max": 580
+      },
+      "pipCost": 4
+    },
+
+    {
+      "id": "stormzilla",
+      "displayName": "Stormzilla",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 650,
+        "max": 730
+      },
+      "pipCost": 5
+    },
+
+    {
+      "id": "stormwing",
+      "displayName": "Stormwing",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 550,
+        "max": 550
+      },
+      "pipCost": 5
+    },
+
+    {
+      "id": "triton",
+      "displayName": "Triton",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 795,
+        "max": 875
+      },
+      "pipCost": 6
+    },
+
+    {
+      "id": "thunderman",
+      "displayName": "Thunderman",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 205,
+        "max": 205
+      },
+      "pipCost": 4
+    },
+
+    {
+      "id": "storm_lord",
+      "displayName": "Storm Lord",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 690,
+        "max": 690
+      },
+      "pipCost": 7
+    }
   ]
 }
