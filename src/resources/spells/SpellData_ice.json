@@ -1,0 +1,135 @@
+{
+  "spells": [
+    {
+      "id": "frost_beetle",
+      "displayName": "Frost Beetle",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 65,
+        "max": 105
+      },
+      "pipCost": 1
+    },
+
+    {
+      "id": "snow_serpent",
+      "displayName": "Snow Serpent",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 155,
+        "max": 195
+      },
+      "pipCost": 2
+    },
+
+    {
+      "id": "evil_snowman",
+      "displayName": "Evil Snowman",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 240,
+        "max": 300
+      },
+      "pipCost": 3
+    },
+
+    {
+      "id": "volcanic_golem",
+      "displayName": "Volcanic Golem",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 255,
+        "max": 285
+      },
+      "pipCost": 4
+    },
+
+    {
+      "id": "ice_wyvern",
+      "displayName": "Ice Wyvern",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 335,
+        "max": 395
+      },
+      "pipCost": 4
+    },
+
+    {
+      "id": "blizzard",
+      "displayName": "Blizzard",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 250,
+        "max": 290
+      },
+      "pipCost": 4
+    },
+
+    {
+      "id": "blight_hound",
+      "displayName": "Blight Hound",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 420,
+        "max": 500
+      },
+      "pipCost": 5
+    },
+
+    {
+      "id": "thieving_dragon",
+      "displayName": "Thieving Dragon",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 120,
+        "max": 150
+      },
+      "pipCost": 4
+    },
+
+    {
+      "id": "colossus",
+      "displayName": "Colossus",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 515,
+        "max": 595
+      },
+      "pipCost": 6
+    },
+
+    {
+      "id": "frostfeather",
+      "displayName": "Frostfeather",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 135,
+        "max": 135
+      },
+      "pipCost": 4
+    },
+
+    {
+      "id": "frost_giant",
+      "displayName": "Frost Giant",
+      "school": "ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 570,
+        "max": 570
+      },
+      "pipCost": 7
+    }
+  ]
+}
