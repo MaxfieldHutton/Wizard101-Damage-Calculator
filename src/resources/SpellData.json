@@ -37,6 +37,71 @@
       },
       "pipCost": 1,
       "image": "blood_bat.png"
+    },
+
+    {
+      "id": "dark_sprite",
+      "displayName": "Dark Sprite",
+      "school": "Death",
+      "accuracy": 85,
+      "damage": {
+        "min": 65,
+        "max": 105
+      },
+      "pipCost": 1,
+      "image": "dark_sprite.png"
+    },
+
+    {
+      "id": "frost_beetle",
+      "displayName": "Frost Beetle",
+      "school": "Ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 65,
+        "max": 105
+      },
+      "pipCost": 1,
+      "image": "frost_beetle.png"
+    },
+
+    {
+      "id": "imp",
+      "displayName": "Imp",
+      "school": "Life",
+      "accuracy": 90,
+      "damage": {
+        "min": 65,
+        "max": 105
+      },
+      "pipCost": 1,
+      "image": "imp.png"
+    },
+
+    {
+      "id": "scarab",
+      "displayName": "Scarab",
+      "school": "Balance",
+      "accuracy": 85,
+      "damage": {
+        "min": 65,
+        "max": 105
+      },
+      "pipCost": 1,
+      "image": "scarab.png"
+    },
+
+    {
+      "id": "snow_serpent",
+      "displayName": "Snow Serpent",
+      "school": "Ice",
+      "accuracy": 80,
+      "damage": {
+        "min": 155,
+        "max": 195
+      },
+      "pipCost": 1,
+      "image": "snow_serpent.png"
     }
   ]
 }

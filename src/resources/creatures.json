@@ -1,0 +1,81 @@
+{
+  "creatures": [
+    {
+      "id": "kraken",
+      "displayName": "Kraken",
+      "image": "bosses/kraken.png",
+      "rank": 3,
+      "type": "boss",
+      "health": 510,
+      "classification": "Kraken",
+      "school": "storm",
+      "startingPips": 1,
+      "boost": [
+        {
+          "school": "myth",
+          "value":  20
+        }
+      ],
+      "resist": [
+        {
+          "school": "storm",
+          "value":  50
+        }
+      ],
+      "stunnable": false,
+      "beguilable": false
+    },
+
+    {
+      "id": "rotting_fodder",
+      "displayName": "Rotting Fodder",
+      "image": "enemy/rotting_fodder.png",
+      "rank": 2,
+      "type": "enemy",
+      "health": 150,
+      "classification": "Undead",
+      "school": "storm",
+      "startingPips": 1,
+      "boost": [
+        {
+          "school": "myth",
+          "value":  10
+        }
+      ],
+      "resist": [
+        {
+          "school": "storm",
+          "value":  10
+        }
+      ],
+      "stunnable": true,
+      "beguilable": true
+    },
+
+    {
+      "id": "arachna_soldier_ice",
+      "displayName": "Arachna Soldier (Ice)",
+      "image": "enemy/arachna_soldier_ice.png",
+      "rank": 17,
+      "type": "enemy",
+      "health": 3785,
+      "classification": "Spider",
+      "school": "ice",
+      "startingPips": 3,
+      "boost": [
+        {
+          "school": "fire",
+          "value":  15
+        }
+      ],
+      "resist": [
+        {
+          "school": "ice",
+          "value":  50
+        }
+      ],
+      "stunnable": true,
+      "beguilable": true
+    }
+  ]
+}

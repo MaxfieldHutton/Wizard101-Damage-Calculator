@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Wizard101-Damage-Calculator.iml" filepath="$PROJECT_DIR$/Wizard101-Damage-Calculator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Wizard101-Damage-Calculator.iml" filepath="$PROJECT_DIR$/.idea/modules/Wizard101-Damage-Calculator.iml" group="Wizard101-Damage-Calculator" />
     </modules>
   </component>
 </project>
