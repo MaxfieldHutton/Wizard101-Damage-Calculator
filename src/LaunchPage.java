@@ -13,13 +13,15 @@ public class LaunchPage {
 
     private JSONArray spellsArray;     // holds full JSON spell data
     private JSONArray spellsEnchantsArray;     // holds full JSON enchant data
+    private JSONArray enemyArray;     // holds full JSON enemy data
 
-    private JSplitPane spellPane, enchantPane, parentPane;
+    private JSplitPane spellPane, enchantPane, enemyPane, parentPane;
     private JLabel damageLabel, accuracyLabel, pipLabel;
 
 
     private JSONObject currentSpell = null;
     private JSONObject currentEnchant = null;
+    private JSONObject currentEnemy = null;
 
 
 
@@ -101,14 +103,14 @@ public class LaunchPage {
         spellsEnchantsArray = loadSpellEnchantData();
 
         // Build spell list
-        DefaultListModel<String> model = new DefaultListModel<>();
+        DefaultListModel<String> modelEnchants = new DefaultListModel<>();
 
         for (int i = 0; i < spellsEnchantsArray.length(); i++) {
             JSONObject o = spellsEnchantsArray.getJSONObject(i);
-            model.addElement(o.getString("displayName"));
+            modelEnchants.addElement(o.getString("displayName"));
         }
 
-        JList<String> enchantList = new JList<>(model);
+        JList<String> enchantList = new JList<>(modelEnchants);
         enchantList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane enchantListScroll = new JScrollPane(enchantList);
@@ -122,6 +124,32 @@ public class LaunchPage {
         enchantPane.setDividerLocation(200);
         /// /////////////////////////
 
+        /// ///////////////////////// enemies
+        // JSON loading
+        enemyArray = loadEnemyData();
+
+        // Build spell list
+        DefaultListModel<String> modelEnemy = new DefaultListModel<>();
+
+        for (int i = 0; i < enemyArray.length(); i++) {
+            JSONObject o = enemyArray.getJSONObject(i);
+            modelEnemy.addElement(o.getString("displayName"));
+        }
+
+        JList<String> enemyList = new JList<>(modelEnemy);
+        enemyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane enemyListScroll = new JScrollPane(enemyList);
+
+        // Right side image panel
+        JLabel enemyImage = new JLabel("", JLabel.CENTER);
+        JPanel enemyImagePanel = new JPanel(new BorderLayout());
+        enemyImagePanel.add(enemyImage, BorderLayout.CENTER);
+
+        enemyPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, enemyListScroll, enemyImagePanel);
+        enemyPane.setDividerLocation(200);
+        /// /////////////////////////
+
         /// ///////////////////////// parent pane
         parentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, spellPane, enchantPane);
         parentPane.setDividerLocation(400);
@@ -129,7 +157,10 @@ public class LaunchPage {
         /// /////////////////////////
 
 
-        mainPanel.add(parentPane);
+        mainPanel.add(parentPane, BorderLayout.CENTER);
+        mainPanel.add(enemyPane, BorderLayout.EAST);
+        enemyPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+
 
         // When user selects a spell
         spellList.addListSelectionListener(e -> {
@@ -188,6 +219,26 @@ public class LaunchPage {
             }
         });
 
+
+        // When user selects an enemy
+        enemyList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int index = enemyList.getSelectedIndex();
+                JSONObject enemy = enemyArray.getJSONObject(index);
+                currentEnemy = enemy;
+                // Load icon
+                ImageIcon icon = new ImageIcon("src/resources/assets/creatures/" + enemy.getString("image"));
+
+                // Get panel size (or fallback if not yet laid out)
+                int maxW = enemyImage.getWidth() > 0 ? enemyImage.getWidth() : 300;
+                int maxH = enemyImage.getHeight() > 0 ? enemyImage.getHeight() : 300;
+                // Scale image to fit
+                enemyImage.setIcon(scaleToFit(icon, maxW, maxH));
+
+                updateFooter();
+            }
+        });
+
     }
 
 
@@ -226,6 +277,7 @@ public class LaunchPage {
         }
         if (currentSpell != null) {
             JSONObject dmg = currentSpell.getJSONObject("damage");
+
             int min = dmg.getInt("min");;
             int max = dmg.getInt("max");
             int spellAccuracy = currentSpell.getInt("accuracy");
@@ -238,17 +290,37 @@ public class LaunchPage {
                 int finalMax      = max + damage;
                 int finalAccuracy = spellAccuracy + enchantAccuracy;
 
-                damageLabel.setText("Damage: " + finalMin + " - " + finalMax);
+                if (finalMin == finalMax) {
+                    damageLabel.setText("Damage: " + finalMin);
+                } else {
+                    damageLabel.setText("Damage: " + finalMin + " - " + finalMax);
+                }
                 accuracyLabel.setText(String.valueOf(finalAccuracy));
             }
             else { //just spell
-                damageLabel.setText("Damage: " + min + " - " + max);
-                accuracyLabel.setText("Accuracy: " + spellAccuracy);
+                if (min == max) {
+                    damageLabel.setText("Damage: " + min);
+                } else {
+                    damageLabel.setText("Damage: " + min + " - " + max);
+                }
+                accuracyLabel.setText(String.valueOf(spellAccuracy));
             }
         }
 
     }
 
+    private ImageIcon scaleToFit(ImageIcon original, int maxW, int maxH) {
+        int width = original.getIconWidth();
+        int height = original.getIconHeight();
+
+        double scale = Math.min((double) maxW / width, (double) maxH / height);
+
+        int newW = (int) (width * scale);
+        int newH = (int) (height * scale);
+
+        Image resized = original.getImage().getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        return new ImageIcon(resized);
+    }
 
 
     // ------------------------------
@@ -270,10 +342,22 @@ public class LaunchPage {
         try {
             String json = new String(Files.readAllBytes(Paths.get("src/resources/SpellDataEnchants.json")));
             JSONObject root = new JSONObject(json);
-            return root.getJSONArray("spells");
+            return root.getJSONArray("enchants");
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to load SpellDataEnchants.json");
+            return new JSONArray();
+        }
+    }
+
+    private JSONArray loadEnemyData() {
+        try {
+            String json = new String(Files.readAllBytes(Paths.get("src/resources/creatures.json")));
+            JSONObject root = new JSONObject(json);
+            return root.getJSONArray("creatures");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to load creatures.json");
             return new JSONArray();
         }
     }

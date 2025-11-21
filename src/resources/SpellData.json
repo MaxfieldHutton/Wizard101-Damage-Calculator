@@ -102,6 +102,19 @@
       },
       "pipCost": 1,
       "image": "snow_serpent.png"
+    },
+
+    {
+      "id": "ghoul",
+      "displayName": "Ghoul",
+      "school": "death",
+      "accuracy": 80,
+      "damage": {
+        "min": 160,
+        "max": 160
+      },
+      "pipCost": 2,
+      "image": "ghoul.png"
     }
   ]
 }
