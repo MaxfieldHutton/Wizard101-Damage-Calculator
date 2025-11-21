@@ -74,7 +74,7 @@ public class LaunchPage {
 
         /// //////////////////////////normal spells
         // JSON loading
-        spellsArray = loadSpellData();
+        spellsArray = loadSpellDataFromFolder("src/resources/spells/");
 
         // Build spell list
         DefaultListModel<String> modelSpell = new DefaultListModel<>();
@@ -170,7 +170,7 @@ public class LaunchPage {
                 currentSpell = spell;
 
                 // Load icon
-                ImageIcon icon = new ImageIcon("src/resources/assets/spells/damage-spells/" + spell.getString("image"));
+                ImageIcon icon = new ImageIcon("src/resources/assets/spells/damage-spells/" + spell.getString("school") + "/" + spell.getString("id")+ ".png");
                 spellImage.setIcon(icon);
 
                 // Update damage label
@@ -326,17 +326,40 @@ public class LaunchPage {
     // ------------------------------
     //  JSON Loader
     // ------------------------------
-    private JSONArray loadSpellData() {
+
+    private JSONArray loadSpellsFromFile(String path) {
         try {
-            String json = new String(Files.readAllBytes(Paths.get("src/resources/SpellData.json")));
+            String json = new String(Files.readAllBytes(Paths.get(path)));
             JSONObject root = new JSONObject(json);
             return root.getJSONArray("spells");
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to load SpellData.json");
+            JOptionPane.showMessageDialog(null, "Failed to load " + path);
             return new JSONArray();
         }
     }
+
+    private JSONArray loadSpellDataFromFolder(String folderPath) {
+        JSONArray allSpells = new JSONArray();
+
+        try {
+            Files.list(Paths.get(folderPath)).forEach(path -> {
+                if (path.toString().endsWith(".json")) {
+                    JSONArray arr = loadSpellsFromFile(path.toString());
+                    for (int i = 0; i < arr.length(); i++) {
+                        allSpells.put(arr.get(i));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to read folder " + folderPath);
+        }
+
+        return allSpells;
+    }
+
+
 
     private JSONArray loadSpellEnchantData() {
         try {

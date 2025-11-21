@@ -10,20 +10,7 @@
         "max": 120
       },
       "pipCost": 1,
-      "image": "fire_cat.png"
-    },
-
-    {
-      "id": "thunder_snake",
-      "displayName": "Thunder Snake",
-      "school": "Storm",
-      "accuracy": 70,
-      "damage": {
-        "min": 105,
-        "max": 145
-      },
-      "pipCost": 1,
-      "image": "thunder_snake.png"
+      "image": "fire/fire_cat.png"
     },
 
     {
@@ -36,7 +23,7 @@
         "max": 110
       },
       "pipCost": 1,
-      "image": "blood_bat.png"
+      "image": "myth/blood_bat.png"
     },
 
     {
@@ -49,7 +36,7 @@
         "max": 105
       },
       "pipCost": 1,
-      "image": "dark_sprite.png"
+      "image": "death/dark_sprite.png"
     },
 
     {
@@ -62,7 +49,7 @@
         "max": 105
       },
       "pipCost": 1,
-      "image": "frost_beetle.png"
+      "image": "ice/frost_beetle.png"
     },
 
     {
@@ -75,7 +62,7 @@
         "max": 105
       },
       "pipCost": 1,
-      "image": "imp.png"
+      "image": "life/imp.png"
     },
 
     {
@@ -88,7 +75,7 @@
         "max": 105
       },
       "pipCost": 1,
-      "image": "scarab.png"
+      "image": "balance/scarab.png"
     },
 
     {
@@ -101,7 +88,7 @@
         "max": 195
       },
       "pipCost": 1,
-      "image": "snow_serpent.png"
+      "image": "ice/snow_serpent.png"
     },
 
     {
@@ -114,7 +101,7 @@
         "max": 160
       },
       "pipCost": 2,
-      "image": "ghoul.png"
+      "image": "death/ghoul.png"
     }
   ]
 }

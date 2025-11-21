@@ -1,0 +1,27 @@
+{
+  "spells": [
+    {
+      "id": "thunder_snake",
+      "displayName": "Thunder Snake",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 105,
+        "max": 145
+      },
+      "pipCost": 1
+    },
+
+    {
+      "id": "lightning_bats",
+      "displayName": "Lightning Bats",
+      "school": "storm",
+      "accuracy": 70,
+      "damage": {
+        "min": 245,
+        "max": 285
+      },
+      "pipCost": 2
+    },
+  ]
+}
